@@ -18,7 +18,6 @@ __pycache__/
 Thumbs.db
 
 # Bỏ qua dlib nếu là folder mã nguồn được clone hoặc build
-dlib/
 
 # Bỏ qua file xuất IDE (VSCode, PyCharm, v.v.)
 .vscode/
