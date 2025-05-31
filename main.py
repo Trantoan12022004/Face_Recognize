@@ -97,7 +97,7 @@ def add_new_user(encoder):
             num_photos = 3
         
         # Gọi hàm với tham số camera_id=None để hỏi người dùng
-        success = encoder.add_user_from_webcam(user_name, age, address, num_photos, camera_id=None)
+        success = encoder.add_user_from_webcam(user_name, age, address, num_photos)
         if success:
             print(f"Successfully added new user: {user_name}")
         else:

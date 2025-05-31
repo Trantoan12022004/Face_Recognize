@@ -9,7 +9,7 @@ def recognize_from_webcam(known_face_encodings, known_face_names, user_info=None
     """
     # Cho phép người dùng chọn camera nếu không chỉ định
     if camera_id is None:
-        camera_id = select_camera()
+        camera_id = 1
     
     # Mở webcam
     video_capture = cv2.VideoCapture(camera_id)

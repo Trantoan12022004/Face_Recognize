@@ -7,7 +7,6 @@ import numpy as np
 from time import sleep
 import pandas as pd
 from datetime import datetime as dt
-from modules.camera_utils import select_camera
 
 class AttendanceSystem:
     def __init__(self, attendance_file='data/attendance.json'):
@@ -132,11 +131,12 @@ class AttendanceSystem:
         absent_list = [user for user in unique_users if user not in attendance_data]
         return absent_list
 
-    def take_attendance_webcam(self, known_face_encodings, known_face_names, user_info=None, is_checkout=False, camera_id=None):
+    def take_attendance_webcam(self, known_face_encodings, known_face_names, user_info=None, is_checkout=False, camera_id=1):
         """Điểm danh thông qua webcam (có thể là check-in hoặc check-out)"""
-        # Cho phép người dùng chọn camera nếu không chỉ định
+        # Sử dụng camera mặc định là 1, bỏ phần chọn camera
+        # Nếu có truyền camera_id thì sử dụng, nếu không thì mặc định là 1
         if camera_id is None:
-            camera_id = select_camera()
+            camera_id = 1  # Mặc định sử dụng camera 1
     
         # Mở webcam
         video_capture = cv2.VideoCapture(camera_id)

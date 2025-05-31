@@ -225,58 +225,101 @@ class FaceEncoder:
         user_folder = os.path.join(self.photos_dir, user_name)
         os.makedirs(user_folder, exist_ok=True)
         
-        # Sử dụng WebcamManager để mở cửa sổ webcam riêng
-        webcam_mgr = WebcamManager()
+        # Chọn camera (dùng camera mặc định hoặc yêu cầu người dùng chọn)
+        camera_id = 0  # Mặc định là camera 0
+        try:
+            camera_id = 1  # Sử dụng hàm select_camera từ camera_utils
+        except:
+            print("Không thể chọn camera, sử dụng camera mặc định (0)")
         
-        def process_captured_images(images, username):
-            if not images:
-                return False
+        # Mở webcam
+        cap = cv2.VideoCapture(camera_id)
+        if not cap.isOpened():
+            print(f"Lỗi: Không thể mở camera {camera_id}")
+            return False
+        
+        # Biến đếm số ảnh đã chụp
+        captured_count = 0
+        images = []
+        
+        print(f"Chuẩn bị chụp {num_photos} ảnh. Nhấn SPACE để chụp, ESC để hủy.")
+        
+        while captured_count < num_photos:
+            # Đọc frame từ camera
+            ret, frame = cap.read()
+            if not ret:
+                print("Lỗi không đọc được frame từ camera")
+                break
                 
-            encodings_added = 0
+            # Hiển thị frame với hướng dẫn
+            text = f"Ảnh: {captured_count}/{num_photos} | SPACE: chụp | ESC: hủy"
+            cv2.putText(frame, text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
             
-            for i, image in enumerate(images):
-                # Lưu ảnh vào thư mục người dùng
-                new_file_name = f"{username}_{i + 1:03d}.jpg"
-                image_path = os.path.join(user_folder, new_file_name)
-                
-                # Lưu ảnh
-                cv2.imwrite(image_path, image)
-                
-                try:
-                    # Thêm encoding vào danh sách
-                    rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-                    face_locations = face_recognition.face_locations(rgb_image)
-                    
-                    if face_locations:
-                        encoding = face_recognition.face_encodings(rgb_image, face_locations)[0]
-                        self.known_face_encodings.append(encoding)
-                        self.known_face_names.append(username)
-                        encodings_added += 1
-                except Exception as e:
-                    print(f"Lỗi khi mã hóa khuôn mặt: {e}")
+            # Hiển thị frame
+            cv2.imshow(f"Chụp ảnh cho {user_name}", frame)
             
-            # Thêm thông tin người dùng và lưu encoding
-            if encodings_added > 0:
-                self.update_user_info(username, age, address)
-                self.save_encodings()
-                messagebox.showinfo("Thành công", 
-                                 f"Đã thêm người dùng {username} với {encodings_added} ảnh khuôn mặt!")
-                return True
-            else:
-                messagebox.showerror("Lỗi", "Không thể mã hóa khuôn mặt từ ảnh chụp")
+            # Xử lý phím bấm
+            key = cv2.waitKey(1)
+            
+            # Phím SPACE: chụp ảnh
+            if key == 32:  # Space key
+                images.append(frame.copy())
+                captured_count += 1
+                print(f"Đã chụp ảnh {captured_count}/{num_photos}")
+                
+                # Cho người dùng thấy đã chụp ảnh
+                cv2.putText(frame, "ĐÃ CHỤP!", (50, 80), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0, 0, 255), 3)
+                cv2.imshow(f"Chụp ảnh cho {user_name}", frame)
+                cv2.waitKey(500)  # Dừng 0.5 giây để hiển thị thông báo
+                
+            # Phím ESC: hủy
+            elif key == 27:  # ESC key
+                print("Đã hủy chụp ảnh")
+                cap.release()
+                cv2.destroyAllWindows()
                 return False
         
-        # Mở cửa sổ webcam để chụp ảnh
-        webcam_mgr.open_webcam_window(
-            parent=None,  # Cần truyền parent từ app.py
-            title=f"Chụp ảnh cho {user_name}",
-            callback_fn=process_captured_images,
-            is_capture_mode=True,
-            num_photos=num_photos,
-            username=user_name
-        )
+        # Giải phóng camera và đóng cửa sổ
+        cap.release()
+        cv2.destroyAllWindows()
         
-        return True  # Trả về True vì kết quả thực sự sẽ được xử lý trong callback
+        # Xử lý ảnh đã chụp
+        if not images:
+            print("Không có ảnh nào được chụp")
+            return False
+        
+        encodings_added = 0
+        
+        for i, image in enumerate(images):
+            # Lưu ảnh vào thư mục người dùng
+            new_file_name = f"{user_name}_{i + 1:03d}.jpg"
+            image_path = os.path.join(user_folder, new_file_name)
+            
+            # Lưu ảnh
+            cv2.imwrite(image_path, image)
+            
+            try:
+                # Thêm encoding vào danh sách
+                rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+                face_locations = face_recognition.face_locations(rgb_image)
+                
+                if face_locations:
+                    encoding = face_recognition.face_encodings(rgb_image, face_locations)[0]
+                    self.known_face_encodings.append(encoding)
+                    self.known_face_names.append(user_name)
+                    encodings_added += 1
+            except Exception as e:
+                print(f"Lỗi khi mã hóa khuôn mặt: {e}")
+        
+        # Thêm thông tin người dùng và lưu encoding
+        if encodings_added > 0:
+            self.update_user_info(user_name, age, address)
+            self.save_encodings()
+            print(f"Đã thêm người dùng {user_name} với {encodings_added} ảnh khuôn mặt!")
+            return True
+        else:
+            print("Không thể mã hóa khuôn mặt từ ảnh chụp")
+            return False
     
     def process_user_images(self, user_name, images, age=None, address=None):
         """

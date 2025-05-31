@@ -49,7 +49,7 @@
   },
   "anhtonton": {
     "age": "21",
-    "address": "Thái Bình"
+    "address": "HUST"
   },
   "mtp": {
     "age": "30",
@@ -62,5 +62,13 @@
   "QA": {
     "age": "19",
     "address": "HUST"
+  },
+  "jack": {
+    "age": null,
+    "address": null
+  },
+  "tu": {
+    "age": null,
+    "address": null
   }
 }

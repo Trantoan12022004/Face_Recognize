@@ -1,10 +1,14 @@
 {
   "2025-05-31": {
     "anhtonton": {
-      "checkin": "16:09:37"
+      "checkin": "16:09:37",
+      "checkout": "19:07:13"
     },
     "QA": {
       "checkin": "16:09:43"
+    },
+    "vietANH": {
+      "checkin": "19:03:06"
     }
   }
 }
