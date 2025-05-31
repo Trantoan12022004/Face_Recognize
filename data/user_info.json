@@ -43,16 +43,16 @@
     "age": "39",
     "address": "Al-Nassr, Saudi Arabia"
   },
-  "vinicius": {
-    "age": "24",
-    "address": "Real Madrid, Tây Ban Nha"
+  "mtp": {
+    "age": "30",
+    "address": "Thaibinh"
+  },
+  "tu": {
+    "age": null,
+    "address": null
   },
   "anhtonton": {
     "age": "21",
     "address": "HUST"
-  },
-  "mtp": {
-    "age": "30",
-    "address": "Thaibinh"
   }
 }
