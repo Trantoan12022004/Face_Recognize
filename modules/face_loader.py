@@ -359,3 +359,51 @@ class FaceEncoder:
             return True
             
         return False
+    
+    def delete_user(self, user_name):
+        """
+        Xóa người dùng khỏi hệ thống
+        
+        Args:
+            user_name: Tên người dùng cần xóa
+            
+        Returns:
+            bool: True nếu xóa thành công, False nếu có lỗi
+        """
+        try:
+            # Kiểm tra nếu người dùng tồn tại
+            if user_name not in self.known_face_names and user_name not in self.user_info:
+                print(f"User '{user_name}' not found.")
+                return False
+                
+            # Xóa các encoding liên quan đến người dùng
+            if user_name in self.known_face_names:
+                # Tìm tất cả vị trí của user_name trong known_face_names
+                indices_to_remove = [i for i, name in enumerate(self.known_face_names) if name == user_name]
+                
+                # Xóa từ cuối lên để tránh thay đổi index
+                for idx in sorted(indices_to_remove, reverse=True):
+                    self.known_face_names.pop(idx)
+                    self.known_face_encodings.pop(idx)
+            
+            # Xóa thông tin người dùng
+            if user_name in self.user_info:
+                del self.user_info[user_name]
+                # Thêm dòng này để lưu thay đổi vào database JSON
+                self.save_user_info()
+                
+            # Xóa thư mục ảnh của người dùng (nếu tồn tại)
+            user_folder = os.path.join(self.photos_dir, user_name)
+            if os.path.exists(user_folder):
+                import shutil
+                shutil.rmtree(user_folder)
+                
+            # Lưu lại trạng thái encodings
+            self.save_encodings()
+            
+            print(f"User '{user_name}' deleted successfully.")
+            return True
+            
+        except Exception as e:
+            print(f"Error deleting user: {e}")
+            return False

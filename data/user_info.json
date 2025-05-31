@@ -54,21 +54,5 @@
   "mtp": {
     "age": "30",
     "address": "Thaibinh"
-  },
-  "vietANH": {
-    "age": "19",
-    "address": "hust"
-  },
-  "QA": {
-    "age": "19",
-    "address": "HUST"
-  },
-  "jack": {
-    "age": null,
-    "address": null
-  },
-  "tu": {
-    "age": null,
-    "address": null
   }
 }
