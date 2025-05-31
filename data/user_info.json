@@ -1,0 +1,66 @@
+{
+  "Bale": {
+    "age": "21",
+    "address": "xứ Wales"
+  },
+  "bellingham": {
+    "age": "21",
+    "address": "Real Madrid, Tây Ban Nha"
+  },
+  "benzema": {
+    "age": "36",
+    "address": "Al-Ittihad, Saudi Arabia"
+  },
+  "carvajal": {
+    "age": "32",
+    "address": "Real Madrid, Tây Ban Nha"
+  },
+  "courtois": {
+    "age": "32",
+    "address": "Real Madrid, Tây Ban Nha"
+  },
+  "kevin": {
+    "age": "33",
+    "address": "Manchester City, Anh"
+  },
+  "mbappe": {
+    "age": "25",
+    "address": "Real Madrid, Tây Ban Nha"
+  },
+  "messi": {
+    "age": "37",
+    "address": "Inter Miami, Mỹ"
+  },
+  "modric": {
+    "age": "39",
+    "address": "Real Madrid, Tây Ban Nha"
+  },
+  "neymar": {
+    "age": "32",
+    "address": "Al-Hilal, Saudi Arabia"
+  },
+  "ronaldo": {
+    "age": "39",
+    "address": "Al-Nassr, Saudi Arabia"
+  },
+  "vinicius": {
+    "age": "24",
+    "address": "Real Madrid, Tây Ban Nha"
+  },
+  "anhtonton": {
+    "age": "21",
+    "address": "Thái Bình"
+  },
+  "mtp": {
+    "age": "30",
+    "address": "Thaibinh"
+  },
+  "vietANH": {
+    "age": "19",
+    "address": "hust"
+  },
+  "QA": {
+    "age": "19",
+    "address": "HUST"
+  }
+}
